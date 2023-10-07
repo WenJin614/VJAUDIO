@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\React\dist\bundle.js" />
+    <Content Remove="wwwroot\React\src\App.js" />
+    <Content Remove="wwwroot\React\src\index.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\React\dist\bundle.js" />
+    <None Include="wwwroot\React\src\App.js" />
+    <None Include="wwwroot\React\src\index.js" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,142 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var count = HttpContextAccessor.HttpContext.Session.GetInt32("Count") ?? 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - VJAUDIO</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/XGaming.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<style>
+    header {
+  background-color: #fff;
+  color: #000;
+}
+
+.menu-icon {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  height: 50px;
+  width: 50px;
+}
+
+.logo {
+  font-size: 34px;
+}
+
+nav li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.fa {
+  margin-right: 5px;
+}
+
+header ul {
+  display: flex;
+  align-items: center;
+}
+
+@@media screen and (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+  nav {
+    display: none;
+  }
+  nav.active {
+    display: block;
+  }
+  nav.active ul {
+    flex-direction: column;
+  }
+}
+
+body {
+    background-image: url('/img/whiteimg.jpg'); 
+        background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+</style>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <div class="menu-icon"><i class="fa fa-bars"></i></div>
+                <a class="navbar-brand mx-auto logo" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight:bold;padding-left: 20%;">VJAUDIO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar collapse d-sm-inline-flex justify-content-between" style="float:right;">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" style="font-weight:bold;">Feature</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy" style="font-weight:bold;">Sound</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy" style="font-weight:bold;">Review</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Cart" style="font-weight:bold;"><i class="fa fa-shopping-cart"></i>
+                               <span id="countDisplay" class="badge" style="border-radius: 1rem; border-color: black; border: 2px solid black; color: black; padding: 0.1em 0.35em;"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container" style="height: 710px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - VJAUDIO - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></link>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    @*<script type="module" src="/js/main.js"></script>*@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<script>
+   $(document).ready(function () {
+       if(@count >= 99) {
+           $('#countDisplay').text("99+");
+       }
+       else {
+          $('#countDisplay').text(@count);
+       }
+   });
+</script>
