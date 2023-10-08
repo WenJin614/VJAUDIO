@@ -6,7 +6,7 @@ on:
       - main  # Adjust the branch name as needed
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,13 +18,14 @@ jobs:
       with:
         dotnet-version: '3.x'  # Use the appropriate .NET Core version
 
-    - name: Build and Publish
-      run: |
-        dotnet publish -c Release -o publish
-        echo '::set-output name=dir::publish'
+    - name: Build the ASP.NET Core app
+      run: dotnet build ./VJAUDIO.csproj  # Replace with your project file
+
+    - name: Publish the ASP.NET Core app
+      run: dotnet publish ./VJAUDIO.csproj -c Release -o publish
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ${{ steps.build.outputs.dir }}
+        publish_dir: ./VJAUDIO/publish  # Replace with your actual publish directory
