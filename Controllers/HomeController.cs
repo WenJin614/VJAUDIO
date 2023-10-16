@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VJAUDIO.Models;
+using VJAUDIO.Services;
 
 namespace VJAUDIO.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly MariaDbContext _dbContext;
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger)
+        public HomeController(MariaDbContext dbContext, IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger)
         {
+            _dbContext = dbContext;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
@@ -39,64 +42,20 @@ namespace VJAUDIO.Controllers
         [HttpGet]
         public IActionResult AddCount(string colorID)
         {
-            var getcount = HttpContext.Session.GetInt32("Count") ?? 0;
-            var getcolor = HttpContext.Session.GetString("Color");
-            var getbrowncount = HttpContext.Session.GetInt32("brown") ?? 0;
-            var getgreencount = HttpContext.Session.GetInt32("green") ?? 0;
-            var getbluecount = HttpContext.Session.GetInt32("blue") ?? 0;
-            var getmauvecount = HttpContext.Session.GetInt32("mauve") ?? 0;
-            var getorangecount = HttpContext.Session.GetInt32("orange") ?? 0;
-            var getgreycount = HttpContext.Session.GetInt32("grey") ?? 0;
-            var getblackcount = HttpContext.Session.GetInt32("black") ?? 0;
-            var getwhitecount = HttpContext.Session.GetInt32("white") ?? 0;
-
-            if (string.IsNullOrWhiteSpace(getcolor))
+            if(!string.IsNullOrWhiteSpace(colorID))
             {
-                HttpContext.Session.SetString("Color", colorID);
-            }
-            else
-            {
-                if (!getcolor.Contains(colorID))
+                var headsetcolor = _dbContext.HeadsetColor.FirstOrDefault(x => x.Color == colorID);
+                if(headsetcolor != null)
                 {
-                    HttpContext.Session.SetString("Color", getcolor + "," + colorID);
+                    HeadsetColorService.Update(_dbContext, colorID);
                 }
+                else
+                {
+                    HeadsetColorService.Add(_dbContext, colorID);
+                }
+                return Json(new { success = true, count = headsetcolor.Count});
             }
-
-            if (colorID == "brown")
-            {
-                HttpContext.Session.SetInt32("brown", getbrowncount + 1);
-            }
-            else if (colorID == "green")
-            {
-                HttpContext.Session.SetInt32("green", getgreencount + 1);
-            }
-            else if (colorID == "blue")
-            {
-                HttpContext.Session.SetInt32("blue", getbluecount + 1);
-            }
-            else if (colorID == "mauve")
-            {
-                HttpContext.Session.SetInt32("mauve", getmauvecount + 1);
-            }
-            else if (colorID == "orange")
-            {
-                HttpContext.Session.SetInt32("orange", getorangecount + 1);
-            }
-            else if (colorID == "grey")
-            {
-                HttpContext.Session.SetInt32("grey", getgreycount + 1);
-            }
-            else if (colorID == "black")
-            {
-                HttpContext.Session.SetInt32("black", getblackcount + 1);
-            }
-            else if (colorID == "white")
-            {
-                HttpContext.Session.SetInt32("white", getwhitecount + 1);
-            }
-
-            HttpContext.Session.SetInt32("Count", getcount + 1);
-            return Json(new { success = true, count = getcount + 1 });
+            return Json(new { success = false });
         }
     }
 }

@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using VJAUDIO;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,15 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddDbContextPool<MariaDbContext>(options => options
+    .UseMySql(
+        builder.Configuration.GetConnectionString("MariaDbConnectionString"),
+        new MySqlServerVersion(new Version(8, 0, 21))
+        )
+);
+
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +48,7 @@ if (!app.Environment.IsDevelopment())
 StaticFileOptions options = new StaticFileOptions { ContentTypeProvider = new FileExtensionContentTypeProvider() };
 options.ServeUnknownFileTypes = true;
 app.UseStaticFiles(options);
+
 //app.UseFileServer(enableDirectoryBrowsing: true);
 
 app.UseHttpsRedirection();
