@@ -1,21 +1,6 @@
-﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+﻿@model List<HeadsetColor> 
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
-    var color = HttpContextAccessor.HttpContext.Session.GetString("Color");
-    int brown = HttpContextAccessor.HttpContext.Session.GetInt32("brown") ?? 0;
-    int green = HttpContextAccessor.HttpContext.Session.GetInt32("green") ?? 0;
-    int blue = HttpContextAccessor.HttpContext.Session.GetInt32("blue") ?? 0;
-    int mauve = HttpContextAccessor.HttpContext.Session.GetInt32("mauve") ?? 0;
-    int orange = HttpContextAccessor.HttpContext.Session.GetInt32("orange") ?? 0;
-    int grey = HttpContextAccessor.HttpContext.Session.GetInt32("grey") ?? 0;
-    int black = HttpContextAccessor.HttpContext.Session.GetInt32("black") ?? 0;
-    int white = HttpContextAccessor.HttpContext.Session.GetInt32("white") ?? 0;
-    string[] getarray = null;
-
-    if (!string.IsNullOrWhiteSpace(color))
-    {
-        getarray = color.Split(",");
-    }
-    int count = 1;
 }
 
 <h1 style="text-align: center;">Shopping Cart</h1>
@@ -30,50 +15,14 @@
         </tr>
     </thead>
     <tbody>
-        @if (getarray != null)
+        @foreach (var color in Model)
         {
-            @foreach (var getcolor in getarray)
-            {
-                <tr>
-                    <td>@count</td>
-                    <td>@getcolor.ToUpper()</td>
-                    @if (getcolor == "brown")
-                    {
-                        <td>@brown</td>
-                    }
-                    else if (getcolor == "green")
-                    {
-                        <td>@green</td>
-                    }
-                    else if (getcolor == "blue")
-                    {
-                        <td>@blue</td>
-                    }
-                    else if (getcolor == "mauve")
-                    {
-                        <td>@mauve</td>
-                    }
-                    else if (getcolor == "orange")
-                    {
-                        <td>@orange</td>
-                    }
-                    else if (getcolor == "grey")
-                    {
-                        <td>@grey</td>
-                    }
-                    else if (getcolor == "black")
-                    {
-                        <td>@black</td>
-                    }
-                    else if (getcolor == "white")
-                    {
-                        <td>@white</td>
-                    }
-                    <td>$39.99</td>
-                </tr>
-
-                count++;
-            }
+            <tr>
+                <td>@color.Id</td>
+                <td>@color.Color</td>
+                <td>@color.Count</td>
+                <td>$39.99</td>
+            </tr>
         }
     </tbody>
 </table>

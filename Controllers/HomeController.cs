@@ -20,6 +20,8 @@ namespace VJAUDIO.Controllers
 
         public IActionResult Index()
         {
+            var count = _dbContext.HeadsetColor.ToList().Select(x => x.Count).Sum();
+            HttpContext.Session.SetInt32("Count", count);
             return View();
         }
 
@@ -30,7 +32,8 @@ namespace VJAUDIO.Controllers
 
         public IActionResult Cart()
         {
-            return View();
+            var count = _dbContext.HeadsetColor.OrderBy(x => x.Id).ToList();
+            return View(count);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -53,7 +56,8 @@ namespace VJAUDIO.Controllers
                 {
                     HeadsetColorService.Add(_dbContext, colorID);
                 }
-                return Json(new { success = true, count = headsetcolor.Count});
+                var count = _dbContext.HeadsetColor.ToList().Select(x => x.Count).Sum();
+                return Json(new { success = true, count = count });
             }
             return Json(new { success = false });
         }

@@ -14,6 +14,7 @@ namespace VJAUDIO.Services
                     headset.Color = color;
                     headset.Count = 1;
                     db.Add(headset);
+                    db.SaveChanges();
                     tx.Commit();
                 }
                 catch (Exception ex)
@@ -31,9 +32,10 @@ namespace VJAUDIO.Services
             {
                 try
                 {
-                    VJAUDIO.Models.HeadsetColor headset = db.HeadsetColor.FirstOrDefault(x => x.Color == color);
+                    HeadsetColor headset = db.HeadsetColor.FirstOrDefault(x => x.Color == color);
                     headset.Count = headset.Count + 1;
-                    db.Add(headset);
+                    db.Update(headset);
+                    db.SaveChanges();
                     tx.Commit();
                 }
                 catch (Exception ex)

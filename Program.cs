@@ -26,12 +26,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddDbContextPool<MariaDbContext>(options => options
-    .UseMySql(
+
+// Transit error
+builder.Services.AddDbContext<MariaDbContext>(options => {
+    options.UseMySql(
         builder.Configuration.GetConnectionString("MariaDbConnectionString"),
         new MySqlServerVersion(new Version(8, 0, 21))
-        )
-);
+        );
+}, ServiceLifetime.Transient);
 
 builder.Services.AddControllers();
 
